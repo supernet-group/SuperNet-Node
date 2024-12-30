@@ -361,29 +361,6 @@ func (chain WrapperDistri) OrderFailed(buyer solana.PublicKey, orderPlacedMetada
 	return sig, nil
 }
 
-// GetMachine retrieves the machine information from the blockchain using the distri_ai program.
-func (chain WrapperDistri) GetMachine() (distri_ai.Machine, error) {
-
-	var data distri_ai.Machine
-
-	resp, err := chain.Conn.RpcClient.GetAccountInfo(
-		context.TODO(),
-		chain.ProgramDistriMachine,
-	)
-	if err != nil {
-		return data, nil
-	}
-
-	borshDec := bin.NewBorshDecoder(resp.GetBinary())
-
-	err = data.UnmarshalWithDecoder(borshDec)
-	if err != nil {
-		return data, fmt.Errorf("> UnmarshalWithDecoder: %v", err)
-	}
-
-	return data, nil
-}
-
 // GetMachine is a method of the WrapperDistri struct that retrieves machine information.
 func (chain WrapperDistri) GetMachine() (distri_ai.Machine, error) {
 
