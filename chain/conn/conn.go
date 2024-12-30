@@ -1,8 +1,8 @@
 package conn
 
 import (
-	"DistriAI-Node/config"
-	logs "DistriAI-Node/utils/log_utils"
+	"SuperNet-Node/config"
+	logs "SuperNet-Node/utils/log_utils"
 	"context"
 	"fmt"
 	"strings"

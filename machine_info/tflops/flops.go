@@ -1,8 +1,8 @@
 package tflops
 
 import (
-	gpu "DistriAI-Node/machine_info/gpu/gpu_infos"
-	logs "DistriAI-Node/utils/log_utils"
+	gpu "SuperNet-Node/machine_info/gpu/gpu_infos"
+	logs "SuperNet-Node/utils/log_utils"
 	"strings"
 )
 

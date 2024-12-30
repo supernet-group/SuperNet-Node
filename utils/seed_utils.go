@@ -1,8 +1,8 @@
 package utils
 
 import (
-	"DistriAI-Node/machine_info/machine_uuid"
-	"DistriAI-Node/pattern"
+	"SuperNet-Node/machine_info/machine_uuid"
+	"SuperNet-Node/pattern"
 	"encoding/hex"
 
 	"github.com/gagliardetto/solana-go"

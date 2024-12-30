@@ -1,13 +1,13 @@
 package chain
 
 import (
-	"DistriAI-Node/chain/conn"
-	"DistriAI-Node/chain/wallet"
-	"DistriAI-Node/config"
-	"DistriAI-Node/machine_info/machine_uuid"
-	"DistriAI-Node/pattern"
-	"DistriAI-Node/utils"
-	logs "DistriAI-Node/utils/log_utils"
+	"SuperNet-Node/chain/conn"
+	"SuperNet-Node/chain/wallet"
+	"SuperNet-Node/config"
+	"SuperNet-Node/machine_info/machine_uuid"
+	"SuperNet-Node/pattern"
+	"SuperNet-Node/utils"
+	logs "SuperNet-Node/utils/log_utils"
 	"fmt"
 
 	"github.com/gagliardetto/solana-go"

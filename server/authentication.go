@@ -1,7 +1,7 @@
 package server
 
 import (
-	dbutils "DistriAI-Node/utils/db_utils"
+	dbutils "SuperNet-Node/utils/db_utils"
 	"fmt"
 	"time"
 

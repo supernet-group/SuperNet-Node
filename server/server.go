@@ -1,12 +1,12 @@
 package server
 
 import (
-	"DistriAI-Node/config"
-	"DistriAI-Node/middleware"
-	"DistriAI-Node/server/template"
-	"DistriAI-Node/utils"
-	dbutils "DistriAI-Node/utils/db_utils"
-	logs "DistriAI-Node/utils/log_utils"
+	"SuperNet-Node/config"
+	"SuperNet-Node/middleware"
+	"SuperNet-Node/server/template"
+	"SuperNet-Node/utils"
+	dbutils "SuperNet-Node/utils/db_utils"
+	logs "SuperNet-Node/utils/log_utils"
 	"fmt"
 	"io"
 	"net/http"

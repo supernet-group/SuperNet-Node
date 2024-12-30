@@ -1,9 +1,9 @@
 package main
 
 import (
-	"DistriAI-Node/cmd"
-	"DistriAI-Node/config"
-	"DistriAI-Node/utils/log_utils"
+	"SuperNet-Node/cmd"
+	"SuperNet-Node/config"
+	"SuperNet-Node/utils/log_utils"
 	"fmt"
 	"os"
 	"runtime"
@@ -17,7 +17,7 @@ var Version = "v0.1.2"
 // create command line instance and set app instructions
 func setupApp() *cli.App {
 	app := cli.NewApp()
-	app.Name = "DistriAI-Node"
+	app.Name = "SuperNet-Node"
 	app.Usage = "Share your unused computing capacity to provide support for more AI creators in need and earn profits at the same time."
 	app.Action = startService
 	app.Version = Version

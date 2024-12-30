@@ -1,9 +1,9 @@
 package ip
 
 import (
-	"DistriAI-Node/config"
-	"DistriAI-Node/utils"
-	logs "DistriAI-Node/utils/log_utils"
+	"SuperNet-Node/config"
+	"SuperNet-Node/utils"
+	logs "SuperNet-Node/utils/log_utils"
 	"encoding/json"
 	"fmt"
 	"io"

@@ -1,7 +1,7 @@
 package nginx_utils
 
 import (
-	logs "DistriAI-Node/utils/log_utils"
+	logs "SuperNet-Node/utils/log_utils"
 	"fmt"
 	"os"
 )

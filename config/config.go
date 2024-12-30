@@ -1,9 +1,9 @@
 package config
 
 import (
-	"DistriAI-Node/pattern"
-	"DistriAI-Node/utils"
-	logs "DistriAI-Node/utils/log_utils"
+	"SuperNet-Node/pattern"
+	"SuperNet-Node/utils"
+	logs "SuperNet-Node/utils/log_utils"
 	"fmt"
 	"os"
 

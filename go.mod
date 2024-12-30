@@ -1,4 +1,4 @@
-module DistriAI-Node
+module SuperNet-Node
 
 go 1.22
 

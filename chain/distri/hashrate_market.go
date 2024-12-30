@@ -1,13 +1,13 @@
 package distri
 
 import (
-	"DistriAI-Node/chain"
-	"DistriAI-Node/chain/distri/distri_ai"
-	"DistriAI-Node/docker"
-	"DistriAI-Node/machine_info"
-	"DistriAI-Node/pattern"
-	"DistriAI-Node/utils"
-	logs "DistriAI-Node/utils/log_utils"
+	"SuperNet-Node/chain"
+	"SuperNet-Node/chain/distri/distri_ai"
+	"SuperNet-Node/docker"
+	"SuperNet-Node/machine_info"
+	"SuperNet-Node/pattern"
+	"SuperNet-Node/utils"
+	logs "SuperNet-Node/utils/log_utils"
 	"context"
 	"encoding/json"
 	"fmt"

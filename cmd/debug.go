@@ -8,6 +8,9 @@ import (
 	// "github.com/docker/docker/client"
 	// "github.com/docker/go-connections/nat"
 
+	"SuperNet-Node/pattern"
+	logs "SuperNet-Node/utils/log_utils"
+
 	"github.com/urfave/cli"
 	// "golang.org/x/crypto/nacl/box"
 )
@@ -82,6 +85,8 @@ var DebugCommand = cli.Command{
 		// return nil
 
 		/* =============================================== */
+
+		logs.Normal(pattern.LOGO)
 		return nil
 	},
 }

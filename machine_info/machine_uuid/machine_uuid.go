@@ -1,7 +1,7 @@
 package machine_uuid
 
 import (
-	"DistriAI-Node/utils/log_utils"
+	"SuperNet-Node/utils/log_utils"
 	"crypto/sha256"
 	"encoding/hex"
 )

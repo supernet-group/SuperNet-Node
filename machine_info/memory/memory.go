@@ -1,7 +1,7 @@
 package memory
 
 import (
-	"DistriAI-Node/utils/log_utils"
+	"SuperNet-Node/utils/log_utils"
 	"fmt"
 
 	"github.com/shirou/gopsutil/v3/mem"

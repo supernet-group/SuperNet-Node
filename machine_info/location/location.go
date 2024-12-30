@@ -1,7 +1,7 @@
 package location
 
 import (
-	"DistriAI-Node/utils/log_utils"
+	"SuperNet-Node/utils/log_utils"
 	"encoding/json"
 	"fmt"
 	"io"
