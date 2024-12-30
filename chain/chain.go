@@ -15,11 +15,11 @@ import (
 
 // InfoChain encapsulates basic information about the chain
 type InfoChain struct {
-	Conn                 *conn.Conn
-	Wallet               *wallet.Wallet
-	ProgramDistriID      solana.PublicKey
-	ProgramDistriMachine solana.PublicKey
-	ProgramDistriOrder   solana.PublicKey
+	Conn                *conn.Conn
+	Wallet              *wallet.Wallet
+	ProgramSuperID      solana.PublicKey
+	ProgramSuperMachine solana.PublicKey
+	ProgramSuperOrder   solana.PublicKey
 }
 
 // GetChainInfo returns *Infochain and error when the connection fails
@@ -34,7 +34,7 @@ func GetChainInfo(cfg *config.SolanaConfig, machineUUID machine_uuid.MachineUUID
 		return nil, fmt.Errorf("> wallet.InitWallet: %v", err)
 	}
 
-	programID := solana.MustPublicKeyFromBase58(pattern.PROGRAM_DISTRI_ID)
+	programID := solana.MustPublicKeyFromBase58(pattern.PROGRAM_SUPER_ID)
 
 	seedMachine := utils.GenMachine(wallet.Wallet.PublicKey(), machineUUID)
 
@@ -48,10 +48,10 @@ func GetChainInfo(cfg *config.SolanaConfig, machineUUID machine_uuid.MachineUUID
 	logs.Normal(fmt.Sprintf("machineAccount : %v", machineAccount.String()))
 
 	chainInfo := &InfoChain{
-		Conn:                 newConn,
-		Wallet:               wallet,
-		ProgramDistriID:      programID,
-		ProgramDistriMachine: machineAccount,
+		Conn:                newConn,
+		Wallet:              wallet,
+		ProgramSuperID:      programID,
+		ProgramSuperMachine: machineAccount,
 	}
 
 	return chainInfo, nil

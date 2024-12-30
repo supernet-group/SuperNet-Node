@@ -37,8 +37,8 @@ func GetIpInfo() (InfoIP, error) {
 		config.GlobalConfig.Console.PublicIP = response.IP
 	}
 
-	if !utils.CheckPort(config.GlobalConfig.Console.DistriPort) {
-		return InfoIP{}, fmt.Errorf("> port %s is not available", config.GlobalConfig.Console.DistriPort)
+	if !utils.CheckPort(config.GlobalConfig.Console.SuperPort) {
+		return InfoIP{}, fmt.Errorf("> port %s is not available", config.GlobalConfig.Console.SuperPort)
 	}
 	if !utils.CheckPort(config.GlobalConfig.Console.WorkPort) {
 		return InfoIP{}, fmt.Errorf("> port %s is not available", config.GlobalConfig.Console.WorkPort)
@@ -66,6 +66,6 @@ func GetIpInfo() (InfoIP, error) {
 		response.ExpandPort = append(response.ExpandPort, config.GlobalConfig.Console.ExpandPort3)
 	}
 
-	response.Port = config.GlobalConfig.Console.DistriPort
+	response.Port = config.GlobalConfig.Console.SuperPort
 	return response, nil
 }

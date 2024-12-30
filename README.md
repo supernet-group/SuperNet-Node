@@ -55,7 +55,7 @@ base:
   # The level of privacy protection provided
   securityLevel: 0
 console:
-  # Directory provided for training models. default: /data/distri
+  # Directory provided for training models. default: /data/super
   workDirectory:
   # default: https://ipfs.distri.ai
   ipfsNodeUrl:
@@ -63,7 +63,7 @@ console:
   publicIP:
   # The port on which the SuperNet listens. default: 13010
   # Make sure the public network is accessible
-  distriPort:
+  superPort:
   # The port on which the workspace or deploy listens. default: 13011
   workPort:
   # The port on which the Local server listens. default: 13012

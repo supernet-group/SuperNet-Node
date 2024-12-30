@@ -11,7 +11,7 @@ func GenNginxConfig(nginxPort, workPort, serverPort, modleCreatePath string) err
 		nginxPort, workPort, serverPort))
 	nginxDir := "/etc/nginx/sites-enabled"
 
-	os.Remove(nginxDir + "/distri.conf")
+	os.Remove(nginxDir + "/super.conf")
 
 	// files, err := os.ReadDir(nginxDir)
 	// if err != nil {
@@ -29,9 +29,9 @@ func GenNginxConfig(nginxPort, workPort, serverPort, modleCreatePath string) err
 	listen %v;
 	listen [::]:%v;
 
-	server_name distri-ai-node;
+	server_name super-net-node;
 
-	location ^~ /distri/ {
+	location ^~ /super/ {
 		proxy_pass http://127.0.0.1:%v/;
 		proxy_set_header Host $host;
 		proxy_set_header X-Real-IP $remote_addr;
@@ -56,7 +56,7 @@ func GenNginxConfig(nginxPort, workPort, serverPort, modleCreatePath string) err
     }
 }`, nginxPort, nginxPort, serverPort, modleCreatePath, workPort)
 
-	err := os.WriteFile(nginxDir+"/distri.conf", []byte(nginxConfig), 0644)
+	err := os.WriteFile(nginxDir+"/super.conf", []byte(nginxConfig), 0644)
 	if err != nil {
 		return fmt.Errorf("> WriteFile: %v", err)
 	}

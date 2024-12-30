@@ -47,14 +47,14 @@ var DebugCommand = cli.Command{
 		// 	return err
 		// }
 
-		// orderPlacedMetadata.MachineAccounts = chainInfo.ProgramDistriMachine.String()
+		// orderPlacedMetadata.MachineAccounts = chainInfo.ProgramSuperMachine.String()
 
-		// chainInfo.ProgramDistriOrder = solana.MustPublicKeyFromBase58("7cSAPAPqm2tKA5yyKAz8vxvKVu51oTSDXSVnpsPVr9YV")
+		// chainInfo.ProgramSuperOrder = solana.MustPublicKeyFromBase58("7cSAPAPqm2tKA5yyKAz8vxvKVu51oTSDXSVnpsPVr9YV")
 
 		// buyer := solana.MustPublicKeyFromBase58("AxBoDKGYKBa54qkDusWWYgf8QXufvBKTJTQBaKyEiEzF")
 
-		// distriWrapper := distri.NewDistriWrapper(chainInfo)
-		// _, err = distriWrapper.OrderFailed(buyer, orderPlacedMetadata)
+		// superWrapper := super.NewSuperWrapper(chainInfo)
+		// _, err = superWrapper.OrderFailed(buyer, orderPlacedMetadata)
 		// if err != nil {
 		// 	logs.Error(err.Error())
 		// }

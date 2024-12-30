@@ -2,7 +2,7 @@ package control
 
 import (
 	"SuperNet-Node/chain"
-	"SuperNet-Node/chain/distri"
+	"SuperNet-Node/chain/super"
 	"SuperNet-Node/config"
 	"SuperNet-Node/docker"
 	"SuperNet-Node/machine_info"
@@ -18,45 +18,42 @@ import (
 
 	"github.com/gagliardetto/solana-go"
 )
+
 // OrderComplete marks the completion of an order process.
-func OrderComplete(distri *distri.WrapperDistri, metadata string, isGPU bool, containerID string) error {
+func OrderComplete(super *super.WrapperSuper, metadata string, isGPU bool, containerID string) error {
 	logs.Normal("Order is complete")
-// Stop the workspace container associated with the order.
+	// Stop the workspace container associated with the order.
 	if err := docker.StopWorkspaceContainer(containerID); err != nil {
 		return err
 	}
-// Unmarshal the order placement metadata JSON string into a structured object.
+	// Unmarshal the order placement metadata JSON string into a structured object.
 	var orderPlacedMetadata pattern.OrderPlacedMetadata
 
 	err := json.Unmarshal([]byte(metadata), &orderPlacedMetadata)
 	if err != nil {
 		return err
 	}
-// Update the machine accounts information in the metadata with the current distribution machine details.
-	orderPlacedMetadata.MachineAccounts = distri.ProgramDistriMachine.String()
-	// Notify the distribution system that the order has been completed, providing the updated metadata and GPU usage flag.
-	_, err = distri.OrderCompleted(orderPlacedMetadata, isGPU)
+	orderPlacedMetadata.MachineAccounts = super.ProgramSuperMachine.String()
+	_, err = super.OrderCompleted(orderPlacedMetadata, isGPU)
 	if err != nil {
 		return err
 	}
 	return nil
 }
+
 // OrderFailed Handles the scenario where an order has failed.
-func OrderFailed(distri *distri.WrapperDistri, orderPlacedMetadata pattern.OrderPlacedMetadata, buyer solana.PublicKey) error {
+func OrderFailed(super *super.WrapperSuper, orderPlacedMetadata pattern.OrderPlacedMetadata, buyer solana.PublicKey) error {
 	logs.Normal("Order is failed")
-// Update the metadata with the machine account from the distribution service
-	orderPlacedMetadata.MachineAccounts = distri.ProgramDistriMachine.String()
-// Attempt to mark the order as failed within the distribution system
-	_, err := distri.OrderFailed(buyer, orderPlacedMetadata)
+	orderPlacedMetadata.MachineAccounts = super.ProgramSuperMachine.String()
+	_, err := super.OrderFailed(buyer, orderPlacedMetadata)
 	if err != nil {
 		// Return a formatted error if the order fail processing encounters an issue
-		return fmt.Errorf("> distri.OrderFailed: %v", err.Error())
+		return fmt.Errorf("> super.OrderFailed: %v", err.Error())
 	}
 	return nil
 }
 
-// GetDistri retrieves a distribution wrapper, machine information, and an error based on the provided longTime flag.
-func GetDistri(longTime bool) (*distri.WrapperDistri, *machine_info.MachineInfo, error) {
+func GetSuper(longTime bool) (*super.WrapperSuper, *machine_info.MachineInfo, error) {
 
 	var hwInfo machine_info.MachineInfo
 
@@ -98,7 +95,7 @@ func GetDistri(longTime bool) (*distri.WrapperDistri, *machine_info.MachineInfo,
 
 	key := config.GlobalConfig.Base.PrivateKey
 
-	// Derive a unique machine UUID considering various hardware specifics; return an error if unable to do so.	
+	// Derive a unique machine UUID considering various hardware specifics; return an error if unable to do so.
 	machineUUID, err := machine_uuid.GetInfoMachineUUID(
 		hwInfo.CPUInfo.ModelName,
 		hwInfo.GPUInfo.Model,
@@ -122,7 +119,7 @@ func GetDistri(longTime bool) (*distri.WrapperDistri, *machine_info.MachineInfo,
 	}
 
 	// Update hardware info with chain details and UUID.
-	hwInfo.MachineAccounts = chainInfo.ProgramDistriMachine.String()
+	hwInfo.MachineAccounts = chainInfo.ProgramSuperMachine.String()
 	hwInfo.Addr = chainInfo.Wallet.Wallet.PublicKey().String()
 	hwInfo.MachineUUID = machineUUID
 
@@ -152,8 +149,7 @@ func GetDistri(longTime bool) (*distri.WrapperDistri, *machine_info.MachineInfo,
 		return nil, nil, fmt.Errorf("> Unzip: %v", err)
 	}
 	logs.Normal("Model upload web static resources have been downloaded")
-// Instantiate and return the distribution wrapper along with the updated machine info.
-	return distri.NewDistriWrapper(chainInfo), &hwInfo, nil
+	return super.NewSuperWrapper(chainInfo), &hwInfo, nil
 }
 
 // var oldDuration time.Time
@@ -169,7 +165,7 @@ func OrderRefunded(containerID string) error {
 }
 
 // StartHeartbeatTask starts a ticker to periodically submit heartbeat tasks.
-func StartHeartbeatTask(distri *distri.WrapperDistri, machineID machine_uuid.MachineUUID) {
+func StartHeartbeatTask(super *super.WrapperSuper, machineID machine_uuid.MachineUUID) {
 	ticker := time.NewTicker(6 * time.Hour)
 	go func() {
 		for {
@@ -189,7 +185,7 @@ func StartHeartbeatTask(distri *distri.WrapperDistri, machineID machine_uuid.Mac
 					logs.Error(fmt.Sprintf("error parsing machineUuid: %v", err))
 				}
 
-				hash, err := distri.SubmitTask(taskUuid, machineUuid, utils.CurrentPeriod(), pattern.TaskMetadata{})
+				hash, err := super.SubmitTask(taskUuid, machineUuid, utils.CurrentPeriod(), pattern.TaskMetadata{})
 				if err != nil {
 					logs.Error(fmt.Sprintf("Error block : %v, msg : %v\n", hash, err))
 				}

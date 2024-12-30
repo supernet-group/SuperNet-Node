@@ -107,7 +107,7 @@ func getDebugToken(c *gin.Context) {
 	} else {
 		deployURL := fmt.Sprintf("http://%v:%v",
 			config.GlobalConfig.Console.PublicIP,
-			config.GlobalConfig.Console.DistriPort)
+			config.GlobalConfig.Console.SuperPort)
 
 		logs.Normal(fmt.Sprintf("Redirect to: %v", deployURL))
 
@@ -300,7 +300,7 @@ func uploadFile(c *gin.Context) {
 func RedirectWorkspace(c *gin.Context, token string) {
 	workspaceURL := fmt.Sprintf("http://%v:%v?token=%v",
 		config.GlobalConfig.Console.PublicIP,
-		config.GlobalConfig.Console.DistriPort,
+		config.GlobalConfig.Console.SuperPort,
 		token)
 
 	logs.Normal(fmt.Sprintf("Redirect to: %v", workspaceURL))

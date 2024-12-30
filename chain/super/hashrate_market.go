@@ -1,8 +1,8 @@
-package distri
+package super
 
 import (
 	"SuperNet-Node/chain"
-	"SuperNet-Node/chain/distri/distri_ai"
+	"SuperNet-Node/chain/super/distri_ai"
 	"SuperNet-Node/docker"
 	"SuperNet-Node/machine_info"
 	"SuperNet-Node/pattern"
@@ -18,12 +18,11 @@ import (
 	"github.com/gagliardetto/solana-go/rpc"
 )
 
-type WrapperDistri struct {
+type WrapperSuper struct {
 	*chain.InfoChain
 }
 
-// Register the given hardware information with a distributed system or blockchain
-func (chain WrapperDistri) AddMachine(hardwareInfo machine_info.MachineInfo) (string, error) {
+func (chain WrapperSuper) AddMachine(hardwareInfo machine_info.MachineInfo) (string, error) {
 	logs.Normal(fmt.Sprintf("Extrinsic : %v", pattern.TX_HASHRATE_MARKET_REGISTER))
 
 	// Get the recent block hash
@@ -36,15 +35,14 @@ func (chain WrapperDistri) AddMachine(hardwareInfo machine_info.MachineInfo) (st
 	if err != nil {
 		return "", fmt.Errorf("> ParseMachineUUID: %v", err.Error())
 	}
-	
+
 	// Serialize machine information to JSON format
 	jsonData, err := json.Marshal(hardwareInfo)
 	if err != nil {
 		return "", fmt.Errorf("> json.Marshal: %v", err.Error())
 	}
 
-	// Set the program ID for the distributed smart contract
-	distri_ai.SetProgramID(chain.ProgramDistriID)
+	distri_ai.SetProgramID(chain.ProgramSuperID)
 
 	// Create Solana transaction
 	tx, err := solana.NewTransaction(
@@ -52,7 +50,7 @@ func (chain WrapperDistri) AddMachine(hardwareInfo machine_info.MachineInfo) (st
 			distri_ai.NewAddMachineInstruction(
 				uuid,
 				string(jsonData),
-				chain.ProgramDistriMachine,
+				chain.ProgramSuperMachine,
 				chain.Wallet.Wallet.PublicKey(),
 				solana.SystemProgramID,
 			).Build(),
@@ -92,8 +90,7 @@ func (chain WrapperDistri) AddMachine(hardwareInfo machine_info.MachineInfo) (st
 	return sig, nil
 }
 
-// RemoveMachine is a method of the WrapperDistri struct that removes a machine from the distribution program.
-func (chain WrapperDistri) RemoveMachine() (string, error) {
+func (chain WrapperSuper) RemoveMachine() (string, error) {
 	logs.Normal(fmt.Sprintf("Extrinsic : %s", pattern.TX_HASHRATE_MARKET_REMOVE_MACHINE))
 
 	// Get the most recent blockhash from the Solana RPC client with a finalized commitment.
@@ -102,13 +99,12 @@ func (chain WrapperDistri) RemoveMachine() (string, error) {
 		panic(err)
 	}
 
-	// Set the program ID for the distribution AI to the one specified in the chain.
-	distri_ai.SetProgramID(chain.ProgramDistriID)
+	distri_ai.SetProgramID(chain.ProgramSuperID)
 	// Create a new Solana transaction with a single instruction to remove a machine.
 	tx, err := solana.NewTransaction(
 		[]solana.Instruction{
 			distri_ai.NewRemoveMachineInstruction(
-				chain.ProgramDistriMachine,
+				chain.ProgramSuperMachine,
 				chain.Wallet.Wallet.PublicKey(),
 			).Build(),
 		},
@@ -146,23 +142,22 @@ func (chain WrapperDistri) RemoveMachine() (string, error) {
 	return sig, nil
 }
 
-// Define a method OrderStart for the WrapperDistri struct that initiates an order on the blockchain.
-func (chain WrapperDistri) OrderStart() (string, error) {
+func (chain WrapperSuper) OrderStart() (string, error) {
 	logs.Normal(fmt.Sprintf("Extrinsic : %v", pattern.TX_HASHRATE_MARKET_ORDER_START))
 
 	// Retrieve the most recent blockhash from the blockchain using the RpcClient.
-        // The commitment level is set to Finalized, ensuring the blockhash is confirmed.
+	// The commitment level is set to Finalized, ensuring the blockhash is confirmed.
 	recent, err := chain.Conn.RpcClient.GetRecentBlockhash(context.TODO(), rpc.CommitmentFinalized)
 	if err != nil {
 		return "", fmt.Errorf("> GetRecentBlockhash: %v", err)
 	}
 
-	distri_ai.SetProgramID(chain.ProgramDistriID)
+	distri_ai.SetProgramID(chain.ProgramSuperID)
 	// Create a new Solana transaction with the StartOrderInstruction and other necessary parameters.
 	tx, err := solana.NewTransaction(
 		[]solana.Instruction{
 			distri_ai.NewStartOrderInstruction(
-				chain.ProgramDistriOrder,
+				chain.ProgramSuperOrder,
 				chain.Wallet.Wallet.PublicKey(),
 			).Build(),
 		},
@@ -198,8 +193,7 @@ func (chain WrapperDistri) OrderStart() (string, error) {
 	return sig, nil
 }
 
-// OrderCompleted is a method of the WrapperDistri struct that handles the completion of an order in the distribution system.
-func (chain WrapperDistri) OrderCompleted(orderPlacedMetadata pattern.OrderPlacedMetadata, isGPU bool) (string, error) {
+func (chain WrapperSuper) OrderCompleted(orderPlacedMetadata pattern.OrderPlacedMetadata, isGPU bool) (string, error) {
 	logs.Normal(fmt.Sprintf("Extrinsic : %v", pattern.TX_HASHRATE_MARKET_ORDER_COMPLETED))
 
 	score, err := docker.RunScoreContainer(isGPU)
@@ -228,20 +222,20 @@ func (chain WrapperDistri) OrderCompleted(orderPlacedMetadata pattern.OrderPlace
 	seedVault := utils.GenVault()
 	vault, _, err := solana.FindProgramAddress(
 		seedVault,
-		chain.ProgramDistriID,
+		chain.ProgramSuperID,
 	)
 	if err != nil {
 		return "", fmt.Errorf("error finding program address: %v", err)
 	}
 
-	distri_ai.SetProgramID(chain.ProgramDistriID)
+	distri_ai.SetProgramID(chain.ProgramSuperID)
 	tx, err := solana.NewTransaction(
 		[]solana.Instruction{
 			distri_ai.NewOrderCompletedInstruction(
 				string(jsonData),
 				scoreUint8,
-				chain.ProgramDistriMachine,
-				chain.ProgramDistriOrder,
+				chain.ProgramSuperMachine,
+				chain.ProgramSuperOrder,
 				seller,
 				sellerAta,
 				vault,
@@ -285,7 +279,7 @@ func (chain WrapperDistri) OrderCompleted(orderPlacedMetadata pattern.OrderPlace
 }
 
 // OrderFailed handles the failure of an order by processing a transaction on the blockchain.
-func (chain WrapperDistri) OrderFailed(buyer solana.PublicKey, orderPlacedMetadata pattern.OrderPlacedMetadata) (string, error) {
+func (chain WrapperSuper) OrderFailed(buyer solana.PublicKey, orderPlacedMetadata pattern.OrderPlacedMetadata) (string, error) {
 	logs.Normal(fmt.Sprintf("Extrinsic : %v", pattern.TX_HASHRATE_MARKET_ORDER_FAILED))
 
 	recent, err := chain.Conn.RpcClient.GetRecentBlockhash(context.TODO(), rpc.CommitmentFinalized)
@@ -308,19 +302,19 @@ func (chain WrapperDistri) OrderFailed(buyer solana.PublicKey, orderPlacedMetada
 	seedVault := utils.GenVault()
 	vault, _, err := solana.FindProgramAddress(
 		seedVault,
-		chain.ProgramDistriID,
+		chain.ProgramSuperID,
 	)
 	if err != nil {
 		return "", fmt.Errorf("> FindProgramAddress: %v", err.Error())
 	}
 
-	distri_ai.SetProgramID(chain.ProgramDistriID)
+	distri_ai.SetProgramID(chain.ProgramSuperID)
 	tx, err := solana.NewTransaction(
 		[]solana.Instruction{
 			distri_ai.NewOrderFailedInstruction(
 				string(jsonData),
-				chain.ProgramDistriMachine,
-				chain.ProgramDistriOrder,
+				chain.ProgramSuperMachine,
+				chain.ProgramSuperOrder,
 				seller,
 				buyerAta,
 				vault,
@@ -361,14 +355,13 @@ func (chain WrapperDistri) OrderFailed(buyer solana.PublicKey, orderPlacedMetada
 	return sig, nil
 }
 
-// GetMachine is a method of the WrapperDistri struct that retrieves machine information.
-func (chain WrapperDistri) GetMachine() (distri_ai.Machine, error) {
+func (chain WrapperSuper) GetMachine() (distri_ai.Machine, error) {
 
 	var data distri_ai.Machine
 
 	resp, err := chain.Conn.RpcClient.GetAccountInfo(
 		context.TODO(),
-		chain.ProgramDistriMachine,
+		chain.ProgramSuperMachine,
 	)
 	if err != nil {
 		return data, nil
@@ -384,15 +377,14 @@ func (chain WrapperDistri) GetMachine() (distri_ai.Machine, error) {
 	return data, nil
 }
 
-// GetOrder retrieves an order from the distribution chain.
 // It returns the deserialized Order struct and an error if any occurs.
-func (chain WrapperDistri) GetOrder() (distri_ai.Order, error) {
+func (chain WrapperSuper) GetOrder() (distri_ai.Order, error) {
 
 	var data distri_ai.Order
 
 	resp, err := chain.Conn.RpcClient.GetAccountInfo(
 		context.TODO(),
-		chain.ProgramDistriOrder,
+		chain.ProgramSuperOrder,
 	)
 	if err != nil {
 		return data, nil
@@ -408,7 +400,7 @@ func (chain WrapperDistri) GetOrder() (distri_ai.Order, error) {
 	return data, nil
 }
 
-func (chain WrapperDistri) SubmitTask(
+func (chain WrapperSuper) SubmitTask(
 	taskUuid pattern.TaskUUID,
 	machineUUID pattern.MachineUUID,
 	period uint32,
@@ -425,7 +417,7 @@ func (chain WrapperDistri) SubmitTask(
 		return "", fmt.Errorf("error marshaling the struct to JSON: %v", err)
 	}
 
-	programID := solana.MustPublicKeyFromBase58(pattern.PROGRAM_DISTRI_ID)
+	programID := solana.MustPublicKeyFromBase58(pattern.PROGRAM_SUPER_ID)
 	seedTask := utils.GenTask(chain.Wallet.Wallet.PublicKey(), taskUuid)
 	task, _, _ := solana.FindProgramAddress(
 		seedTask,
@@ -442,14 +434,14 @@ func (chain WrapperDistri) SubmitTask(
 		programID,
 	)
 
-	distri_ai.SetProgramID(chain.ProgramDistriID)
+	distri_ai.SetProgramID(chain.ProgramSuperID)
 	tx, err := solana.NewTransaction(
 		[]solana.Instruction{
 			distri_ai.NewSubmitTaskInstruction(
 				taskUuid,
 				utils.CurrentPeriod(),
 				string(jsonData),
-				chain.ProgramDistriMachine,
+				chain.ProgramSuperMachine,
 				task,
 				reward,
 				rewardMachine,
@@ -489,6 +481,6 @@ func (chain WrapperDistri) SubmitTask(
 	return sig, nil
 }
 
-func NewDistriWrapper(info *chain.InfoChain) *WrapperDistri {
-	return &WrapperDistri{info}
+func NewSuperWrapper(info *chain.InfoChain) *WrapperSuper {
+	return &WrapperSuper{info}
 }
