@@ -9,7 +9,7 @@ import (
 )
 
 func GenMachine(machineOwner solana.PublicKey, machineUUID machine_uuid.MachineUUID) [][]byte {
-	
+
 	// Convert machineUUID from machine_uuid.MachineUUID to pattern.MachineUUID
 	var byteUUID pattern.MachineUUID
 	b, err := hex.DecodeString(string(machineUUID))
@@ -29,7 +29,7 @@ func GenMachine(machineOwner solana.PublicKey, machineUUID machine_uuid.MachineU
 
 func GenVault() [][]byte {
 
-	ecpc := solana.MustPublicKeyFromBase58(pattern.DIST_TOKEN_ID)
+	ecpc := solana.MustPublicKeyFromBase58(pattern.SNT_TOKEN_ID)
 	seedVault := [][]byte{
 		[]byte("vault"),
 		ecpc.Bytes(),

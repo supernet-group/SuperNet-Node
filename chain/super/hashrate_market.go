@@ -25,10 +25,9 @@ type WrapperSuper struct {
 func (chain WrapperSuper) AddMachine(hardwareInfo machine_info.MachineInfo) (string, error) {
 	logs.Normal(fmt.Sprintf("Extrinsic : %v", pattern.TX_HASHRATE_MARKET_REGISTER))
 
-	// Get the recent block hash
-	recent, err := chain.Conn.RpcClient.GetRecentBlockhash(context.TODO(), rpc.CommitmentFinalized)
+	latest, err := chain.Conn.RpcClient.GetLatestBlockhash(context.Background(), rpc.CommitmentFinalized)
 	if err != nil {
-		return "", fmt.Errorf("> GetRecentBlockhash: %v", err.Error())
+		return "", fmt.Errorf("GetLatestBlockhash error: %s", err)
 	}
 
 	uuid, err := utils.ParseMachineUUID(string(hardwareInfo.MachineUUID))
@@ -55,7 +54,7 @@ func (chain WrapperSuper) AddMachine(hardwareInfo machine_info.MachineInfo) (str
 				solana.SystemProgramID,
 			).Build(),
 		},
-		recent.Value.Blockhash,
+		latest.Value.Blockhash,
 		solana.TransactionPayer(chain.Wallet.Wallet.PublicKey()),
 	)
 
@@ -93,8 +92,7 @@ func (chain WrapperSuper) AddMachine(hardwareInfo machine_info.MachineInfo) (str
 func (chain WrapperSuper) RemoveMachine() (string, error) {
 	logs.Normal(fmt.Sprintf("Extrinsic : %s", pattern.TX_HASHRATE_MARKET_REMOVE_MACHINE))
 
-	// Get the most recent blockhash from the Solana RPC client with a finalized commitment.
-	recent, err := chain.Conn.RpcClient.GetRecentBlockhash(context.TODO(), rpc.CommitmentFinalized)
+	latest, err := chain.Conn.RpcClient.GetLatestBlockhash(context.Background(), rpc.CommitmentFinalized)
 	if err != nil {
 		panic(err)
 	}
@@ -108,7 +106,7 @@ func (chain WrapperSuper) RemoveMachine() (string, error) {
 				chain.Wallet.Wallet.PublicKey(),
 			).Build(),
 		},
-		recent.Value.Blockhash,
+		latest.Value.Blockhash,
 		solana.TransactionPayer(chain.Wallet.Wallet.PublicKey()),
 	)
 
@@ -145,11 +143,9 @@ func (chain WrapperSuper) RemoveMachine() (string, error) {
 func (chain WrapperSuper) OrderStart() (string, error) {
 	logs.Normal(fmt.Sprintf("Extrinsic : %v", pattern.TX_HASHRATE_MARKET_ORDER_START))
 
-	// Retrieve the most recent blockhash from the blockchain using the RpcClient.
-	// The commitment level is set to Finalized, ensuring the blockhash is confirmed.
-	recent, err := chain.Conn.RpcClient.GetRecentBlockhash(context.TODO(), rpc.CommitmentFinalized)
+	latest, err := chain.Conn.RpcClient.GetLatestBlockhash(context.Background(), rpc.CommitmentFinalized)
 	if err != nil {
-		return "", fmt.Errorf("> GetRecentBlockhash: %v", err)
+		return "", fmt.Errorf("GetLatestBlockhash error: %s", err)
 	}
 
 	distri_ai.SetProgramID(chain.ProgramSuperID)
@@ -161,7 +157,7 @@ func (chain WrapperSuper) OrderStart() (string, error) {
 				chain.Wallet.Wallet.PublicKey(),
 			).Build(),
 		},
-		recent.Value.Blockhash,
+		latest.Value.Blockhash,
 		solana.TransactionPayer(chain.Wallet.Wallet.PublicKey()),
 	)
 
@@ -202,7 +198,7 @@ func (chain WrapperSuper) OrderCompleted(orderPlacedMetadata pattern.OrderPlaced
 	}
 	scoreUint8 := uint8(score)
 
-	recent, err := chain.Conn.RpcClient.GetRecentBlockhash(context.TODO(), rpc.CommitmentFinalized)
+	latest, err := chain.Conn.RpcClient.GetLatestBlockhash(context.Background(), rpc.CommitmentFinalized)
 	if err != nil {
 		panic(err)
 	}
@@ -213,7 +209,7 @@ func (chain WrapperSuper) OrderCompleted(orderPlacedMetadata pattern.OrderPlaced
 	}
 
 	seller := chain.Wallet.Wallet.PublicKey()
-	ecpc := solana.MustPublicKeyFromBase58(pattern.DIST_TOKEN_ID)
+	ecpc := solana.MustPublicKeyFromBase58(pattern.SNT_TOKEN_ID)
 	sellerAta, _, err := solana.FindAssociatedTokenAddress(seller, ecpc)
 	if err != nil {
 		return "", fmt.Errorf("error finding associated token address: %v", err)
@@ -245,7 +241,7 @@ func (chain WrapperSuper) OrderCompleted(orderPlacedMetadata pattern.OrderPlaced
 				solana.SystemProgramID,
 			).Build(),
 		},
-		recent.Value.Blockhash,
+		latest.Value.Blockhash,
 		solana.TransactionPayer(chain.Wallet.Wallet.PublicKey()),
 	)
 
@@ -282,7 +278,7 @@ func (chain WrapperSuper) OrderCompleted(orderPlacedMetadata pattern.OrderPlaced
 func (chain WrapperSuper) OrderFailed(buyer solana.PublicKey, orderPlacedMetadata pattern.OrderPlacedMetadata) (string, error) {
 	logs.Normal(fmt.Sprintf("Extrinsic : %v", pattern.TX_HASHRATE_MARKET_ORDER_FAILED))
 
-	recent, err := chain.Conn.RpcClient.GetRecentBlockhash(context.TODO(), rpc.CommitmentFinalized)
+	latest, err := chain.Conn.RpcClient.GetLatestBlockhash(context.Background(), rpc.CommitmentFinalized)
 	if err != nil {
 		panic(err)
 	}
@@ -293,7 +289,7 @@ func (chain WrapperSuper) OrderFailed(buyer solana.PublicKey, orderPlacedMetadat
 	}
 
 	seller := chain.Wallet.Wallet.PublicKey()
-	ecpc := solana.MustPublicKeyFromBase58(pattern.DIST_TOKEN_ID)
+	ecpc := solana.MustPublicKeyFromBase58(pattern.SNT_TOKEN_ID)
 	buyerAta, _, err := solana.FindAssociatedTokenAddress(buyer, ecpc)
 	if err != nil {
 		return "", fmt.Errorf("> FindAssociatedTokenAddress: %v", err.Error())
@@ -323,7 +319,7 @@ func (chain WrapperSuper) OrderFailed(buyer solana.PublicKey, orderPlacedMetadat
 				solana.SPLAssociatedTokenAccountProgramID,
 			).Build(),
 		},
-		recent.Value.Blockhash,
+		latest.Value.Blockhash,
 		solana.TransactionPayer(chain.Wallet.Wallet.PublicKey()),
 	)
 
@@ -407,9 +403,9 @@ func (chain WrapperSuper) SubmitTask(
 	taskMetadata pattern.TaskMetadata) (string, error) {
 	logs.Normal(fmt.Sprintf("Extrinsic : %v", pattern.TX_HASHRATE_MARKET_SUBMIT_TASK))
 
-	recent, err := chain.Conn.RpcClient.GetRecentBlockhash(context.TODO(), rpc.CommitmentFinalized)
+	latest, err := chain.Conn.RpcClient.GetLatestBlockhash(context.Background(), rpc.CommitmentFinalized)
 	if err != nil {
-		return "", fmt.Errorf("error getting recent blockhash: %v", err)
+		return "", fmt.Errorf("GetLatestBlockhash error: %s", err)
 	}
 
 	jsonData, err := json.Marshal(taskMetadata)
@@ -449,7 +445,7 @@ func (chain WrapperSuper) SubmitTask(
 				solana.SystemProgramID,
 			).Build(),
 		},
-		recent.Value.Blockhash,
+		latest.Value.Blockhash,
 		solana.TransactionPayer(chain.Wallet.Wallet.PublicKey()),
 	)
 

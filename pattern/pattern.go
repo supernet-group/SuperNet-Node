@@ -26,7 +26,7 @@ const DefaultIpfsNode = "https://ipfs.distri.ai"
 
 const PROGRAM_SUPER_ID = "6yFTDdiS1W9T9yg6YejkwKggkEE4NYqdSSzVqQvuLn16"
 
-const DIST_TOKEN_ID = "896KfVVY6VRGQs1d9CKLnKUEgXXCCJcEEg7LwSK84vWE"
+const SNT_TOKEN_ID = "896KfVVY6VRGQs1d9CKLnKUEgXXCCJcEEg7LwSK84vWE"
 
 const NO_GPU = "No GPU"
 

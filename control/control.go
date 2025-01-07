@@ -136,7 +136,7 @@ func GetSuper(longTime bool) (*super.WrapperSuper, *machine_info.MachineInfo, er
 	// Define and download model-related static resources, unzip them, and log the completion.
 	var modelURL []utils.DownloadURL
 	modelURL = append(modelURL, utils.DownloadURL{
-		URL:      config.GlobalConfig.Console.IpfsNodeUrl + "/ipfs" + utils.EnsureLeadingSlash("QmZQpwwUTne3rR1ZHfSTAwMQAsGChBBc7Mm8yHCb3QsEhE"),
+		URL:      config.GlobalConfig.Console.IpfsNodeUrl + "/ipfs" + utils.EnsureLeadingSlash("QmZ4eLbxWayopfecKTUxuAwYxjFg8yWKTrFB9z5CN82B6n"),
 		Checksum: "",
 		Name:     "DistriAI-Model-Create.zip",
 	})

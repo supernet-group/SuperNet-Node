@@ -1,1 +1,0 @@
-{"level":"error","ts":1735541784.6328475,"msg":"Error reading config file: open config.yml: no such file or directory"}
