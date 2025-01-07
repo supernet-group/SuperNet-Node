@@ -1,8 +1,8 @@
 package nginx
 
 import (
-	"DistriAI-Node/pattern"
-	"DistriAI-Node/utils/nginx_utils"
+	"SuperNet-Node/pattern"
+	"SuperNet-Node/utils/nginx_utils"
 	"fmt"
 	"os/exec"
 )

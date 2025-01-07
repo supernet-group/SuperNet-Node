@@ -3,26 +3,31 @@ package pattern
 import "github.com/gagliardetto/solana-go/rpc"
 
 const LOGO = `
-██████╗ ██╗███████╗████████╗██████╗ ██╗    █████╗ ██╗
-██╔══██╗██║██╔════╝╚══██╔══╝██╔══██╗██║   ██╔══██╗██║
-██║  ██║██║███████╗   ██║   ██████╔╝██║   ███████║██║
-██║  ██║██║╚════██║   ██║   ██╔══██╗██║   ██╔══██║██║
-██████╔╝██║███████║   ██║   ██║  ██║██║██╗██║  ██║██║
-╚═════╝ ╚═╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝╚═╝╚═╝  ╚═╝╚═╝
-													 
+
+ $$$$$$\                                          $$\   $$\            $$\     
+$$  __$$\                                         $$$\  $$ |           $$ |    
+$$ /  \__|$$\   $$\  $$$$$$\   $$$$$$\   $$$$$$\  $$$$\ $$ | $$$$$$\ $$$$$$\   
+\$$$$$$\  $$ |  $$ |$$  __$$\ $$  __$$\ $$  __$$\ $$ $$\$$ |$$  __$$\\_$$  _|  
+ \____$$\ $$ |  $$ |$$ /  $$ |$$$$$$$$ |$$ |  \__|$$ \$$$$ |$$$$$$$$ | $$ |    
+$$\   $$ |$$ |  $$ |$$ |  $$ |$$   ____|$$ |      $$ |\$$$ |$$   ____| $$ |$$\ 
+\$$$$$$  |\$$$$$$  |$$$$$$$  |\$$$$$$$\ $$ |      $$ | \$$ |\$$$$$$$\  \$$$$  |
+ \______/  \______/ $$  ____/  \_______|\__|      \__|  \__| \_______|  \____/ 
+                    $$ |                                                       
+                    $$ |                                                       
+                    \__|                                                       
+												 
 `
 
 // RPC is the url of the node
 const RPC = rpc.DevNet_RPC
 
-// const DefaultIpfsNode = "https://ipfs.distri.ai/ipfs/"
 const DefaultIpfsNode = "https://ipfs.distri.ai"
 
-const PROGRAM_DISTRI_ID = "6yFTDdiS1W9T9yg6YejkwKggkEE4NYqdSSzVqQvuLn16"
+const PROGRAM_SUPER_ID = "A5N6rdkLKipKNPnt88rSEbegGeFgdTpK4CwAfVjpN2Jo"
 
-const DIST_TOKEN_ID = "896KfVVY6VRGQs1d9CKLnKUEgXXCCJcEEg7LwSK84vWE"
+const SNT_TOKEN_ID = "2QxVVgL7n8K4hFJdvx2Z81Ca1LM7uJarnQ16dZHsLn7n"
 
-const DistriServeUrl = "https://test.distri.ai/index-api"
+const SuperServeUrl = "https://test.distri.ai/index-api"
 
 const NO_GPU = "No GPU"
 
@@ -100,9 +105,9 @@ type MachineUUID [16]byte
 type TaskUUID [16]byte
 
 type OrderPlacedMetadata struct {
-	FormData        FormData    `json:"formData"`
-	MachineInfo     MachineInfo `json:"MachineInfo"`
-	OrderInfo       OrderInfo   `json:"OrderInfo"`
+	FormData    FormData    `json:"formData"`
+	MachineInfo MachineInfo `json:"MachineInfo"`
+	OrderInfo   OrderInfo   `json:"OrderInfo"`
 }
 
 type MachineInfo struct {

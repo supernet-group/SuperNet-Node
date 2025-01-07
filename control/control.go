@@ -1,18 +1,18 @@
 package control
 
 import (
-	"DistriAI-Node/api"
-	"DistriAI-Node/chain"
-	"DistriAI-Node/chain/distri"
-	"DistriAI-Node/chain/distri/distri_ai"
-	"DistriAI-Node/config"
-	"DistriAI-Node/docker"
-	"DistriAI-Node/machine_info"
-	"DistriAI-Node/machine_info/disk"
-	"DistriAI-Node/machine_info/machine_uuid"
-	"DistriAI-Node/pattern"
-	"DistriAI-Node/utils"
-	logs "DistriAI-Node/utils/log_utils"
+	"SuperNet-Node/api"
+	"SuperNet-Node/chain"
+	"SuperNet-Node/chain/super"
+	"SuperNet-Node/chain/super/supernet"
+	"SuperNet-Node/config"
+	"SuperNet-Node/docker"
+	"SuperNet-Node/machine_info"
+	"SuperNet-Node/machine_info/disk"
+	"SuperNet-Node/machine_info/machine_uuid"
+	"SuperNet-Node/pattern"
+	"SuperNet-Node/utils"
+	logs "SuperNet-Node/utils/log_utils"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -22,31 +22,31 @@ import (
 	"github.com/gagliardetto/solana-go"
 )
 
-func OrderComplete(distri *distri.WrapperDistri, order distri_ai.Order, isGPU bool, containerID string) error {
+func OrderComplete(super *super.WrapperSuper, order supernet.Order, isGPU bool, containerID string) error {
 	logs.Normal("Order is complete")
 
 	if err := docker.StopWorkspaceContainer(containerID); err != nil {
 		return err
 	}
 
-	_, err := distri.OrderCompleted(order, isGPU)
+	_, err := super.OrderCompleted(order, isGPU)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func OrderFailed(distri *distri.WrapperDistri, orderPlacedMetadata pattern.OrderPlacedMetadata, buyer solana.PublicKey) error {
+func OrderFailed(super *super.WrapperSuper, orderPlacedMetadata pattern.OrderPlacedMetadata, buyer solana.PublicKey) error {
 	logs.Normal("Order is failed")
 
-	_, err := distri.OrderFailed(buyer, orderPlacedMetadata)
+	_, err := super.OrderFailed(buyer, orderPlacedMetadata)
 	if err != nil {
-		return fmt.Errorf("> distri.OrderFailed: %v", err.Error())
+		return fmt.Errorf("> super.OrderFailed: %v", err.Error())
 	}
 	return nil
 }
 
-func GetDistri(longTime bool) (*distri.WrapperDistri, *machine_info.MachineInfo, error) {
+func GetSuper(longTime bool) (*super.WrapperSuper, *machine_info.MachineInfo, error) {
 
 	var hwInfo machine_info.MachineInfo
 
@@ -106,7 +106,7 @@ func GetDistri(longTime bool) (*distri.WrapperDistri, *machine_info.MachineInfo,
 		return nil, nil, fmt.Errorf("> GetChainInfo: %v", err)
 	}
 
-	hwInfo.MachineAccounts = chainInfo.ProgramDistriMachine.String()
+	hwInfo.MachineAccounts = chainInfo.ProgramSuperMachine.String()
 	hwInfo.Addr = chainInfo.Wallet.Wallet.PublicKey().String()
 	hwInfo.MachineUUID = machineUUID
 
@@ -121,7 +121,7 @@ func GetDistri(longTime bool) (*distri.WrapperDistri, *machine_info.MachineInfo,
 	}
 	var modelURL []utils.DownloadURL
 	modelURL = append(modelURL, utils.DownloadURL{
-		URL:      config.GlobalConfig.Console.IpfsNodeUrl + "/ipfs" + utils.EnsureLeadingSlash("QmZQpwwUTne3rR1ZHfSTAwMQAsGChBBc7Mm8yHCb3QsEhE"),
+		URL:      config.GlobalConfig.Console.IpfsNodeUrl + "/ipfs" + utils.EnsureLeadingSlash("QmZ4eLbxWayopfecKTUxuAwYxjFg8yWKTrFB9z5CN82B6n"),
 		Checksum: "",
 		Name:     "DistriAI-Model-Create.zip",
 	})
@@ -135,7 +135,7 @@ func GetDistri(longTime bool) (*distri.WrapperDistri, *machine_info.MachineInfo,
 	}
 	logs.Normal("Model upload web static resources have been downloaded")
 
-	return distri.NewDistriWrapper(chainInfo), &hwInfo, nil
+	return super.NewSuperWrapper(chainInfo), &hwInfo, nil
 }
 
 func OrderRefunded(containerID string) error {
@@ -147,7 +147,7 @@ func OrderRefunded(containerID string) error {
 }
 
 // temp
-func StartHeartbeatTask(distri *distri.WrapperDistri, machineID machine_uuid.MachineUUID) {
+func StartHeartbeatTask(super *super.WrapperSuper, machineID machine_uuid.MachineUUID) {
 	ticker := time.NewTicker(6 * time.Hour)
 	go func() {
 		for {
@@ -167,7 +167,7 @@ func StartHeartbeatTask(distri *distri.WrapperDistri, machineID machine_uuid.Mac
 					logs.Error(fmt.Sprintf("error parsing machineUuid: %v", err))
 				}
 
-				hash, err := distri.SubmitTask(taskUuid, machineUuid, utils.CurrentPeriod(), pattern.TaskMetadata{})
+				hash, err := super.SubmitTask(taskUuid, machineUuid, utils.CurrentPeriod(), pattern.TaskMetadata{})
 				if err != nil {
 					logs.Error(fmt.Sprintf("Error block : %v, msg : %v\n", hash, err))
 				}
@@ -248,7 +248,7 @@ func IdlePreload(ownerAddr string, machineUUID string, totalDiskSpace float64) e
 		}
 	}
 
-	resFileStat, err := api.FileStatInIPFS(config.GlobalConfig.Console.IpfsNodeUrl, "/distri.ai/model/"+owner+"/"+name)
+	resFileStat, err := api.FileStatInIPFS(config.GlobalConfig.Console.IpfsNodeUrl, "/supernet/model/"+owner+"/"+name)
 	if err != nil {
 		return fmt.Errorf("> FileStatInIPFS: %v", err)
 	}

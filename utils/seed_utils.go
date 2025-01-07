@@ -1,8 +1,8 @@
 package utils
 
 import (
-	"DistriAI-Node/machine_info/machine_uuid"
-	"DistriAI-Node/pattern"
+	"SuperNet-Node/machine_info/machine_uuid"
+	"SuperNet-Node/pattern"
 	"encoding/hex"
 
 	"github.com/gagliardetto/solana-go"
@@ -35,7 +35,7 @@ func GenStatisticsOwner(machineOwner solana.PublicKey) [][]byte {
 
 func GenVault() [][]byte {
 
-	ecpc := solana.MustPublicKeyFromBase58(pattern.DIST_TOKEN_ID)
+	ecpc := solana.MustPublicKeyFromBase58(pattern.SNT_TOKEN_ID)
 	seedVault := [][]byte{
 		[]byte("vault"),
 		ecpc.Bytes(),

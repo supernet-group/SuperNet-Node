@@ -1,7 +1,7 @@
 package speedtest
 
 import (
-	"DistriAI-Node/utils/log_utils"
+	"SuperNet-Node/utils/log_utils"
 	"fmt"
 	"os/exec"
 	"strings"

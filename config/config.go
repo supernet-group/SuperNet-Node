@@ -1,9 +1,9 @@
 package config
 
 import (
-	"DistriAI-Node/pattern"
-	"DistriAI-Node/utils"
-	logs "DistriAI-Node/utils/log_utils"
+	"SuperNet-Node/pattern"
+	"SuperNet-Node/utils"
+	logs "SuperNet-Node/utils/log_utils"
 	"fmt"
 	"os"
 
@@ -20,7 +20,7 @@ type Config struct {
 		WorkDirectory string `yaml:"workDirectory"`
 		IpfsNodeUrl   string `yaml:"ipfsNodeUrl"`
 		PublicIP      string `yaml:"publicIP"`
-		DistriPort    string `yaml:"distriPort"`
+		SuperPort     string `yaml:"superPort"`
 		WorkPort      string `yaml:"workPort"`
 		ServerPort    string `yaml:"serverPort"`
 		ExpandPort1   string `yaml:"publicPortExpand1"`
@@ -57,8 +57,8 @@ func InitializeConfig() {
 	if GlobalConfig.Console.WorkPort == "" {
 		GlobalConfig.Console.WorkPort = "13011"
 	}
-	if GlobalConfig.Console.DistriPort == "" {
-		GlobalConfig.Console.DistriPort = "13010"
+	if GlobalConfig.Console.SuperPort == "" {
+		GlobalConfig.Console.SuperPort = "13010"
 	}
 	if GlobalConfig.Base.Rpc == "" {
 		GlobalConfig.Base.Rpc = pattern.RPC

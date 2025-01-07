@@ -1,11 +1,11 @@
 package docker
 
 import (
-	"DistriAI-Node/config"
-	docker_utils "DistriAI-Node/docker/utils"
-	"DistriAI-Node/pattern"
-	"DistriAI-Node/utils"
-	logs "DistriAI-Node/utils/log_utils"
+	"SuperNet-Node/config"
+	docker_utils "SuperNet-Node/docker/utils"
+	"SuperNet-Node/pattern"
+	"SuperNet-Node/utils"
+	logs "SuperNet-Node/utils/log_utils"
 	"bufio"
 	"context"
 	"fmt"

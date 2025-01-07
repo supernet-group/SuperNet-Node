@@ -1,9 +1,9 @@
 package disk
 
 import (
-	"DistriAI-Node/config"
-	"DistriAI-Node/utils"
-	logs "DistriAI-Node/utils/log_utils"
+	"SuperNet-Node/config"
+	"SuperNet-Node/utils"
+	logs "SuperNet-Node/utils/log_utils"
 	"fmt"
 	"os"
 )
@@ -19,8 +19,8 @@ func GetDiskInfo() (InfoDisk, error) {
 
 	dirpath := config.GlobalConfig.Console.WorkDirectory
 	if _, err := os.Stat(dirpath); os.IsNotExist(err) {
-		logs.Normal(fmt.Sprintf("%s does not exist. Using default directory: /data/distri", dirpath))
-		dirpath = "/data/distri"
+		logs.Normal(fmt.Sprintf("%s does not exist. Using default directory: /data/super", dirpath))
+		dirpath = "/data/super"
 		os.MkdirAll(dirpath, 0755)
 		config.GlobalConfig.Console.WorkDirectory = dirpath
 	}

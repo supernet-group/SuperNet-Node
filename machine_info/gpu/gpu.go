@@ -1,8 +1,8 @@
 package gpu
 
 import (
-	"DistriAI-Node/pattern"
-	logs "DistriAI-Node/utils/log_utils"
+	"SuperNet-Node/pattern"
+	logs "SuperNet-Node/utils/log_utils"
 	"bytes"
 	"os/exec"
 	"strconv"

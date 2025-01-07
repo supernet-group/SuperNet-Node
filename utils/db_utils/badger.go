@@ -1,7 +1,7 @@
 package dbutils
 
 import (
-	"DistriAI-Node/utils"
+	"SuperNet-Node/utils"
 	"fmt"
 	"sync"
 

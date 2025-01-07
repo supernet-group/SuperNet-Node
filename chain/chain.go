@@ -1,24 +1,24 @@
 package chain
 
 import (
-	"DistriAI-Node/chain/conn"
-	"DistriAI-Node/chain/wallet"
-	"DistriAI-Node/config"
-	"DistriAI-Node/machine_info/machine_uuid"
-	"DistriAI-Node/pattern"
-	"DistriAI-Node/utils"
-	logs "DistriAI-Node/utils/log_utils"
+	"SuperNet-Node/chain/conn"
+	"SuperNet-Node/chain/wallet"
+	"SuperNet-Node/config"
+	"SuperNet-Node/machine_info/machine_uuid"
+	"SuperNet-Node/pattern"
+	"SuperNet-Node/utils"
+	logs "SuperNet-Node/utils/log_utils"
 	"fmt"
 
 	"github.com/gagliardetto/solana-go"
 )
 
 type InfoChain struct {
-	Conn                 *conn.Conn
-	Wallet               *wallet.Wallet
-	ProgramDistriID      solana.PublicKey
-	ProgramDistriMachine solana.PublicKey
-	ProgramDistriOrder   solana.PublicKey
+	Conn                *conn.Conn
+	Wallet              *wallet.Wallet
+	ProgramSuperID      solana.PublicKey
+	ProgramSuperMachine solana.PublicKey
+	ProgramSuperOrder   solana.PublicKey
 }
 
 func GetChainInfo(cfg *config.SolanaConfig, machineUUID machine_uuid.MachineUUID) (*InfoChain, error) {
@@ -32,7 +32,7 @@ func GetChainInfo(cfg *config.SolanaConfig, machineUUID machine_uuid.MachineUUID
 		return nil, fmt.Errorf("> wallet.InitWallet: %v", err)
 	}
 
-	programID := solana.MustPublicKeyFromBase58(pattern.PROGRAM_DISTRI_ID)
+	programID := solana.MustPublicKeyFromBase58(pattern.PROGRAM_SUPER_ID)
 
 	seedMachine := utils.GenMachine(wallet.Wallet.PublicKey(), machineUUID)
 
@@ -46,10 +46,10 @@ func GetChainInfo(cfg *config.SolanaConfig, machineUUID machine_uuid.MachineUUID
 	logs.Normal(fmt.Sprintf("machineAccount : %v", machineAccount.String()))
 
 	chainInfo := &InfoChain{
-		Conn:                 newConn,
-		Wallet:               wallet,
-		ProgramDistriID:      programID,
-		ProgramDistriMachine: machineAccount,
+		Conn:                newConn,
+		Wallet:              wallet,
+		ProgramSuperID:      programID,
+		ProgramSuperMachine: machineAccount,
 	}
 
 	return chainInfo, nil

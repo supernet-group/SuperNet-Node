@@ -1,17 +1,17 @@
 package machine_info
 
 import (
-	"DistriAI-Node/config"
-	"DistriAI-Node/machine_info/cpu"
-	"DistriAI-Node/machine_info/disk"
-	"DistriAI-Node/machine_info/gpu"
-	"DistriAI-Node/machine_info/ip"
-	"DistriAI-Node/machine_info/location"
-	"DistriAI-Node/machine_info/machine_uuid"
-	"DistriAI-Node/machine_info/memory"
-	"DistriAI-Node/machine_info/speedtest"
-	"DistriAI-Node/machine_info/tflops"
-	logs "DistriAI-Node/utils/log_utils"
+	"SuperNet-Node/config"
+	"SuperNet-Node/machine_info/cpu"
+	"SuperNet-Node/machine_info/disk"
+	"SuperNet-Node/machine_info/gpu"
+	"SuperNet-Node/machine_info/ip"
+	"SuperNet-Node/machine_info/location"
+	"SuperNet-Node/machine_info/machine_uuid"
+	"SuperNet-Node/machine_info/memory"
+	"SuperNet-Node/machine_info/speedtest"
+	"SuperNet-Node/machine_info/tflops"
+	logs "SuperNet-Node/utils/log_utils"
 	"fmt"
 )
 

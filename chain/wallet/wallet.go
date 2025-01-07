@@ -1,7 +1,7 @@
 package wallet
 
 import (
-	"DistriAI-Node/config"
+	"SuperNet-Node/config"
 	"fmt"
 
 	"github.com/gagliardetto/solana-go"

@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	logs "DistriAI-Node/utils/log_utils"
+	logs "SuperNet-Node/utils/log_utils"
 
 	// "github.com/jdgcs/ed25519/extra25519"
 
@@ -67,16 +67,16 @@ var DebugCommand = cli.Command{
 		// 	return err
 		// }
 
-		// chainInfo.ProgramDistriOrder = solana.MustPublicKeyFromBase58("EdPB44J5h3WSw4xow1tez7cBsW6VZhFC9BmMjfA7QRoJ")
+		// chainInfo.ProgramSuperOrder = solana.MustPublicKeyFromBase58("EdPB44J5h3WSw4xow1tez7cBsW6VZhFC9BmMjfA7QRoJ")
 
 		// buyer := solana.MustPublicKeyFromBase58("AxBoDKGYKBa54qkDusWWYgf8QXufvBKTJTQBaKyEiEzF")
 
-		// distriWrapper := distri.NewDistriWrapper(chainInfo)
-		// // _, err = distriWrapper.OrderFailed(buyer, orderPlacedMetadata)
+		// superWrapper := super.NewSuperWrapper(chainInfo)
+		// // _, err = superWrapper.OrderFailed(buyer, orderPlacedMetadata)
 		// // if err != nil {
 		// // 	logs.Error(err.Error())
 		// // }
-		// _, err = distriWrapper.OrderRefund(buyer)
+		// _, err = superWrapper.OrderRefund(buyer)
 		// if err != nil {
 		// 	logs.Error(err.Error())
 		// }

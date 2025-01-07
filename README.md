@@ -1,4 +1,4 @@
-# DistriAI-Node
+# SuperNet-Node
 Share your unused computing capacity to provide support for more AI creators in need and earn profits at the same time.
 
 ## Recommended configuration
@@ -21,7 +21,7 @@ Please ensure that the following software packages are installed before use.
 - docker
 - nginx
 
-***During the DistriAI-node program execution, all Docker containers will be stopped and the nginx configuration file will be reset. If necessary, please make a backup in advance.***
+***During the SuperNet-node program execution, all Docker containers will be stopped and the nginx configuration file will be reset. If necessary, please make a backup in advance.***
 
 Additional software packages required for GPU devices.
 - nvidia-docker2
@@ -33,13 +33,13 @@ Additional software packages required for GPU devices.
 1. Clone the repository locally.
 
 ```
-git clone https://github.com/distri-group/DistriAI-Index.git
+git clone https://github.com/supernet-group/SuperNet-Node.git
 ```
 
 2. Compile binary executable file.
 
 ```
-CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o bin/DistriAI main.go
+CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o bin/SuperNet main.go
 ```
 
 3. Write configuration file.
@@ -55,15 +55,15 @@ base:
   # The level of privacy protection provided
   securityLevel: 0
 console:
-  # Directory provided for training models. default: /data/distri
+  # Directory provided for training models. default: /data/super
   workDirectory:
   # default: https://ipfs.distri.ai
   ipfsNodeUrl:
   # If using a proxy, please specify the public IP address. If not using a proxy, you can ignore this.
   publicIP:
-  # The port on which the DistriAI listens. default: 13010
+  # The port on which the SuperNet listens. default: 13010
   # Make sure the public network is accessible
-  distriPort:
+  superPort:
   # The port on which the workspace or deploy listens. default: 13011
   workPort:
   # The port on which the Local server listens. default: 13012
@@ -79,13 +79,13 @@ EOF
 4. Run executable file.
 
 ```
-./DistriAI node start
+./SuperNet node start
 ```
 
 - If you have the following error，please check your account for sufficient SOL and DIST.
 
-![amount](https://github.com/distri-group/DistriAI-Node/assets/122685398/fbc25da5-486b-4c4f-87b6-b555057ee5e7)
+![amount](https://github.com/supernet-group/SuperNet-Node/assets/122685398/fbc25da5-486b-4c4f-87b6-b555057ee5e7)
 
 - The following information indicates success.
 
-![success](https://github.com/distri-group/DistriAI-Node/assets/122685398/0c87c803-cf49-42b0-962d-fde82219116b)
+![success](https://github.com/supernet-group/SuperNet-Node/assets/122685398/0c87c803-cf49-42b0-962d-fde82219116b)

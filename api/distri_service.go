@@ -1,7 +1,7 @@
 package api
 
 import (
-	"DistriAI-Node/pattern"
+	"SuperNet-Node/pattern"
 	"bytes"
 	"encoding/json"
 	"fmt"
@@ -63,7 +63,7 @@ func (res ResModelList) IsObsolete(fileNames []string) []string {
 func GetModelList() (ResModelList, error) {
 	var resModelList ResModelList
 
-	url := fmt.Sprintf("%s/model/list", pattern.DistriServeUrl)
+	url := fmt.Sprintf("%s/model/list", pattern.SuperServeUrl)
 
 	client := &http.Client{
 		Timeout: time.Second * 6,
@@ -126,7 +126,7 @@ type ResModelCached struct {
 func UpdateModelCached(ownerAddr, machineUUID string, cachedModels, cachedDatasets []Cached) (ResModelCached, error) {
 	var resModelCached ResModelCached
 
-	url := fmt.Sprintf("%s/machine/info/cached", pattern.DistriServeUrl)
+	url := fmt.Sprintf("%s/machine/info/cached", pattern.SuperServeUrl)
 
 	client := &http.Client{
 		Timeout: time.Second * 6,

@@ -1,13 +1,13 @@
 package server
 
 import (
-	"DistriAI-Node/api"
-	"DistriAI-Node/config"
-	"DistriAI-Node/middleware"
-	"DistriAI-Node/server/template"
-	"DistriAI-Node/utils"
-	dbutils "DistriAI-Node/utils/db_utils"
-	logs "DistriAI-Node/utils/log_utils"
+	"SuperNet-Node/api"
+	"SuperNet-Node/config"
+	"SuperNet-Node/middleware"
+	"SuperNet-Node/server/template"
+	"SuperNet-Node/utils"
+	dbutils "SuperNet-Node/utils/db_utils"
+	logs "SuperNet-Node/utils/log_utils"
 	"fmt"
 	"io"
 	"net/http"
@@ -98,7 +98,7 @@ func getDebugToken(c *gin.Context) {
 	} else {
 		deployURL := fmt.Sprintf("http://%v:%v",
 			config.GlobalConfig.Console.PublicIP,
-			config.GlobalConfig.Console.DistriPort)
+			config.GlobalConfig.Console.SuperPort)
 
 		logs.Normal(fmt.Sprintf("Redirect to: %v", deployURL))
 
@@ -227,7 +227,7 @@ func uploadFile(c *gin.Context) {
 				}
 
 				destination := fmt.Sprintf(
-					"/distri.ai/model/%v/%v%v",
+					"/supernet/model/%v/%v%v",
 					publicKey,
 					uploadFile.ModelName,
 					utils.EnsureLeadingSlash(utils.RemovePrefix(fileItem.Path, config.GlobalConfig.Console.WorkDirectory+"/ml-workspace")))
@@ -257,7 +257,7 @@ func uploadFile(c *gin.Context) {
 			}
 
 			destination := fmt.Sprintf(
-				"/distri.ai/model/%v/%v%v",
+				"/supernet/model/%v/%v%v",
 				publicKey,
 				uploadFile.ModelName,
 				utils.EnsureLeadingSlash(utils.RemovePrefix(file.Path, config.GlobalConfig.Console.WorkDirectory+"/ml-workspace")))
@@ -288,7 +288,7 @@ func uploadFile(c *gin.Context) {
 func RedirectWorkspace(c *gin.Context, token string) {
 	workspaceURL := fmt.Sprintf("http://%v:%v?token=%v",
 		config.GlobalConfig.Console.PublicIP,
-		config.GlobalConfig.Console.DistriPort,
+		config.GlobalConfig.Console.SuperPort,
 		token)
 
 	logs.Normal(fmt.Sprintf("Redirect to: %v", workspaceURL))

@@ -1,15 +1,15 @@
 package cmd
 
 import (
-	"DistriAI-Node/config"
-	"DistriAI-Node/control"
-	"DistriAI-Node/docker"
-	"DistriAI-Node/nginx"
-	"DistriAI-Node/pattern"
-	"DistriAI-Node/server"
-	"DistriAI-Node/utils"
-	dbutils "DistriAI-Node/utils/db_utils"
-	logs "DistriAI-Node/utils/log_utils"
+	"SuperNet-Node/config"
+	"SuperNet-Node/control"
+	"SuperNet-Node/docker"
+	"SuperNet-Node/nginx"
+	"SuperNet-Node/pattern"
+	"SuperNet-Node/server"
+	"SuperNet-Node/utils"
+	dbutils "SuperNet-Node/utils/db_utils"
+	logs "SuperNet-Node/utils/log_utils"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -39,22 +39,22 @@ var ClientCommand = cli.Command{
 
 				preload := c.String("preload")
 
-				distriWrapper, hwInfo, err := control.GetDistri(true)
+				superWrapper, hwInfo, err := control.GetSuper(true)
 				if err != nil {
-					logs.Error(fmt.Sprintf("GetDistri: %v", err))
+					logs.Error(fmt.Sprintf("GetSuper: %v", err))
 					return nil
 				}
 
 				// Easy debugging
 				if err = nginx.StartNginx(
-					config.GlobalConfig.Console.DistriPort,
+					config.GlobalConfig.Console.SuperPort,
 					config.GlobalConfig.Console.WorkPort,
 					config.GlobalConfig.Console.ServerPort); err != nil {
 					logs.Error(fmt.Sprintf("StartNginx error: %v", err))
 					return nil
 				}
 
-				machine, err := distriWrapper.GetMachine()
+				machine, err := superWrapper.GetMachine()
 				if err != nil {
 					logs.Error(fmt.Sprintf("GetMachine: %v", err))
 					return nil
@@ -62,7 +62,7 @@ var ClientCommand = cli.Command{
 
 				if machine.Metadata == "" {
 					logs.Normal("Machine does not exist")
-					_, err := distriWrapper.AddMachine(*hwInfo)
+					_, err := superWrapper.AddMachine(*hwInfo)
 					if err != nil {
 						logs.Error(fmt.Sprintf("AddMachine: %v", err))
 						return nil
@@ -75,12 +75,12 @@ var ClientCommand = cli.Command{
 
 				go server.StartServer(config.GlobalConfig.Console.ServerPort)
 
-				control.StartHeartbeatTask(distriWrapper, hwInfo.MachineUUID)
+				control.StartHeartbeatTask(superWrapper, hwInfo.MachineUUID)
 
 				for {
 					time.Sleep(1 * time.Minute)
 
-					machine, err = distriWrapper.GetMachine()
+					machine, err = superWrapper.GetMachine()
 					if err != nil {
 						logs.Error(fmt.Sprintf("GetMachine: %v", err))
 						continue
@@ -108,7 +108,7 @@ var ClientCommand = cli.Command{
 						// 	break ListenLoop
 						// }
 
-						err = control.IdlePreload(distriWrapper.Wallet.Wallet.PublicKey().String(), string(hwInfo.MachineUUID), hwInfo.DiskInfo.TotalSpace)
+						err = control.IdlePreload(superWrapper.Wallet.Wallet.PublicKey().String(), string(hwInfo.MachineUUID), hwInfo.DiskInfo.TotalSpace)
 						if err != nil {
 							logs.Error(fmt.Sprintf("IdlePreload: %v", err))
 						}
@@ -123,8 +123,8 @@ var ClientCommand = cli.Command{
 							break ListenLoop
 						}
 
-						distriWrapper.ProgramDistriOrder = orderID
-						newOrder, err := distriWrapper.GetOrder()
+						superWrapper.ProgramSuperOrder = orderID
+						newOrder, err := superWrapper.GetOrder()
 						if err != nil {
 							logs.Error(fmt.Sprintf("GetOrder Error: %v", err))
 							break ListenLoop
@@ -158,7 +158,7 @@ var ClientCommand = cli.Command{
 							if err != nil {
 								logs.Error(fmt.Sprintln("RunWorkspaceContainer error: ", err))
 								orderPlacedMetadata.OrderInfo.Message = err.Error()
-								if err = control.OrderFailed(distriWrapper, orderPlacedMetadata, newOrder.Buyer); err != nil {
+								if err = control.OrderFailed(superWrapper, orderPlacedMetadata, newOrder.Buyer); err != nil {
 									logs.Error(fmt.Sprintf("control.OrderFailed: %v", err))
 								}
 								break ListenLoop
@@ -173,7 +173,7 @@ var ClientCommand = cli.Command{
 								errMsg := "The number of models exceeds the limit"
 								logs.Error(errMsg)
 								orderPlacedMetadata.OrderInfo.Message = errMsg
-								if err = control.OrderFailed(distriWrapper, orderPlacedMetadata, newOrder.Buyer); err != nil {
+								if err = control.OrderFailed(superWrapper, orderPlacedMetadata, newOrder.Buyer); err != nil {
 									logs.Error(fmt.Sprintf("control.OrderFailed: %v", err))
 								}
 								break ListenLoop
@@ -200,7 +200,7 @@ var ClientCommand = cli.Command{
 									errMsg := fmt.Sprintf("Model file does not exist, URL: %v", modelName)
 									logs.Error(errMsg)
 									orderPlacedMetadata.OrderInfo.Message = errMsg
-									if err = control.OrderFailed(distriWrapper, orderPlacedMetadata, newOrder.Buyer); err != nil {
+									if err = control.OrderFailed(superWrapper, orderPlacedMetadata, newOrder.Buyer); err != nil {
 										logs.Error(fmt.Sprintf("control.OrderFailed: %v", err))
 									}
 									break ListenLoop
@@ -271,7 +271,7 @@ var ClientCommand = cli.Command{
 							if err != nil {
 								logs.Error(fmt.Sprintln("RunDeployContainer error ", err))
 								orderPlacedMetadata.OrderInfo.Message = err.Error()
-								if err = control.OrderFailed(distriWrapper, orderPlacedMetadata, newOrder.Buyer); err != nil {
+								if err = control.OrderFailed(superWrapper, orderPlacedMetadata, newOrder.Buyer); err != nil {
 									logs.Error(fmt.Sprintf("control.OrderFailed: %v", err))
 								}
 								break ListenLoop
@@ -281,7 +281,7 @@ var ClientCommand = cli.Command{
 							break ListenLoop
 						}
 
-						_, err = distriWrapper.OrderStart()
+						_, err = superWrapper.OrderStart()
 						if err != nil {
 							logs.Error(fmt.Sprintf("OrderStart: %v", err))
 							if err := docker.StopWorkspaceContainer(containerID); err != nil {
@@ -293,7 +293,7 @@ var ClientCommand = cli.Command{
 						for {
 							time.Sleep(1 * time.Minute)
 
-							newOrder, err = distriWrapper.GetOrder()
+							newOrder, err = superWrapper.GetOrder()
 							if err != nil {
 								logs.Error(fmt.Sprintf("GetOrder Error: %v", err))
 								break ListenLoop
@@ -301,7 +301,7 @@ var ClientCommand = cli.Command{
 
 							switch newOrder.Status.String() {
 							case "Preparing":
-								logs.Error(fmt.Sprintf("Order error, ID: %v\norder: %v", distriWrapper.ProgramDistriOrder, newOrder))
+								logs.Error(fmt.Sprintf("Order error, ID: %v\norder: %v", superWrapper.ProgramSuperOrder, newOrder))
 								break ListenLoop
 							case "Training":
 								orderEndTime := time.Unix(newOrder.StartTime, 0).Add(time.Hour * time.Duration(newOrder.Duration))
@@ -314,17 +314,17 @@ var ClientCommand = cli.Command{
 
 									logs.Normal(fmt.Sprintf("Order completed, Details: %v", newOrder))
 
-									if err = control.OrderComplete(distriWrapper, newOrder, isGPU, containerID); err != nil {
+									if err = control.OrderComplete(superWrapper, newOrder, isGPU, containerID); err != nil {
 										logs.Error(fmt.Sprintf("OrderComplete: %v", err))
 									}
 									break ListenLoop
 								}
 								continue
 							case "Completed":
-								logs.Error(fmt.Sprintf("Order error, ID: %v\norder: %v", distriWrapper.ProgramDistriOrder, newOrder))
+								logs.Error(fmt.Sprintf("Order error, ID: %v\norder: %v", superWrapper.ProgramSuperOrder, newOrder))
 								break ListenLoop
 							case "Failed":
-								logs.Error(fmt.Sprintf("Order error, ID: %v\norder: %v", distriWrapper.ProgramDistriOrder, newOrder))
+								logs.Error(fmt.Sprintf("Order error, ID: %v\norder: %v", superWrapper.ProgramSuperOrder, newOrder))
 								break ListenLoop
 							case "Refunded":
 								err = control.OrderRefunded(containerID)
@@ -347,13 +347,13 @@ var ClientCommand = cli.Command{
 			Action: func(c *cli.Context) error {
 				nginx.StopNginx()
 
-				distriWrapper, _, err := control.GetDistri(false)
+				superWrapper, _, err := control.GetSuper(false)
 				if err != nil {
 					logs.Error(err.Error())
 					return nil
 				}
 
-				hash, err := distriWrapper.RemoveMachine()
+				hash, err := superWrapper.RemoveMachine()
 				if err != nil {
 					logs.Error(fmt.Sprintf("Error block : %v, msg : %v\n", hash, err))
 				}

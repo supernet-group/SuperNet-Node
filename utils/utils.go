@@ -1,10 +1,10 @@
 package utils
 
 import (
-	docker_utils "DistriAI-Node/docker/utils"
-	"DistriAI-Node/machine_info/machine_uuid"
-	"DistriAI-Node/pattern"
-	logs "DistriAI-Node/utils/log_utils"
+	docker_utils "SuperNet-Node/docker/utils"
+	"SuperNet-Node/machine_info/machine_uuid"
+	"SuperNet-Node/pattern"
+	logs "SuperNet-Node/utils/log_utils"
 	"archive/zip"
 	"crypto/rand"
 	"crypto/tls"
@@ -302,7 +302,7 @@ type DownloadURL struct {
 func DownloadFiles(dest string, urls []DownloadURL) error {
 	// client := grab.NewClient()
 	client := &grab.Client{
-		UserAgent: "DistriAI",
+		UserAgent: "SuperNet",
 		HTTPClient: &http.Client{
 			Transport: &http.Transport{
 				Proxy: http.ProxyFromEnvironment,
