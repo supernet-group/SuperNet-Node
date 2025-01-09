@@ -103,10 +103,6 @@ var ClientCommand = cli.Command{
 						if utils.RandomInt(26) != 1 {
 							break ListenLoop
 						}
-						// if utils.RandomInt(3) != 1 {
-						// 	logs.Normal("Not in the preload range")
-						// 	break ListenLoop
-						// }
 
 						err = control.IdlePreload(superWrapper.Wallet.Wallet.PublicKey().String(), string(hwInfo.MachineUUID), hwInfo.DiskInfo.TotalSpace)
 						if err != nil {

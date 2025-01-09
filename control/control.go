@@ -121,15 +121,15 @@ func GetSuper(longTime bool) (*super.WrapperSuper, *machine_info.MachineInfo, er
 	}
 	var modelURL []utils.DownloadURL
 	modelURL = append(modelURL, utils.DownloadURL{
-		URL:      config.GlobalConfig.Console.IpfsNodeUrl + "/ipfs" + utils.EnsureLeadingSlash("QmZ4eLbxWayopfecKTUxuAwYxjFg8yWKTrFB9z5CN82B6n"),
+		URL:      config.GlobalConfig.Console.IpfsNodeUrl + "/ipfs" + utils.EnsureLeadingSlash(pattern.ModelCreateCID),
 		Checksum: "",
-		Name:     "DistriAI-Model-Create.zip",
+		Name:     pattern.ModelCreateName + ".zip",
 	})
 	err = utils.DownloadFiles(modleCreatePath, modelURL)
 	if err != nil {
 		return nil, nil, fmt.Errorf("> DownloadFiles: %v", err)
 	}
-	_, err = utils.Unzip(modleCreatePath+"/DistriAI-Model-Create.zip", modleCreatePath)
+	_, err = utils.Unzip(modleCreatePath+"/"+pattern.ModelCreateName+".zip", modleCreatePath)
 	if err != nil {
 		return nil, nil, fmt.Errorf("> Unzip: %v", err)
 	}

@@ -21,17 +21,21 @@ $$\   $$ |$$ |  $$ |$$ |  $$ |$$   ____|$$ |      $$ |\$$$ |$$   ____| $$ |$$\
 // RPC is the url of the node
 const RPC = rpc.DevNet_RPC
 
-const DefaultIpfsNode = "https://ipfs.distri.ai"
+const DefaultIpfsNode = "https://supernet-ipfs.distri.ai"
 
 const PROGRAM_SUPER_ID = "A5N6rdkLKipKNPnt88rSEbegGeFgdTpK4CwAfVjpN2Jo"
 
 const SNT_TOKEN_ID = "2QxVVgL7n8K4hFJdvx2Z81Ca1LM7uJarnQ16dZHsLn7n"
 
-const SuperServeUrl = "https://test.distri.ai/index-api"
+const SuperServeUrl = "https://supernet.distri.ai/index-api"
 
 const NO_GPU = "No GPU"
 
-const ModleCreatePath = "/home/DistriAI-Model-Create"
+const ModelCreateName = "Supernet-Model-Create"
+
+const ModelCreateCID = "Qmb83PNubzF1whuyKFcMgNB7PSbB2h7noqDWg7ZtZb6huH"
+
+const ModleCreatePath = "/home/" + ModelCreateName
 
 // path name
 const (
